@@ -5,7 +5,7 @@
     <title>Guess the word! | AM</title>
     <!-- CSS -->
     <link rel="stylesheet" href="./style.css" />
-    <meta name="viewport" content="width=device.width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device.width, initial-scale=1.0" />
   </head>
   <body>
     <!-- JS -->
@@ -13,7 +13,27 @@
 
     <div class="container-wrapper">
       <h1>Guess the word!</h1>
-    </div>
 
+      <div class="container-content">
+        <div class="inputs">
+          <input type="text" disabled />
+          <input type="text" disabled />
+          <input type="text" disabled />
+          <input type="text" disabled />
+          <input type="text" disabled />
+          <input type="text" disabled />
+        </div>
+
+        <div class="details">
+          <p class="hint-label">Hint: <bold>Programming language</bold></p>
+          <p class="remaining-guesses-label">
+            Remaining guesses: <bold>4</bold>
+          </p>
+          <p class="wrong-letters-label">Wrong letters:</p>
+        </div>
+
+        <button class="reset-btn">New Word</button>
+      </div>
+    </div>
   </body>
 </html>
