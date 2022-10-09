@@ -13,7 +13,7 @@ const wordList = [
     hint: "Best football player in the world",
   },
   {
-    word: "Foo Fighters",
+    word: "Nirvana",
     hint: "Famous rock band",
   },
   {
@@ -29,17 +29,20 @@ const inputs = document.querySelector(".inputs"),
   wrongCharactersLabel = document.querySelector(".wrong-characters-label"),
   resetBtn = document.querySelector(".reset-btn");
 
-var wrongCharacters = [];
+var wrongCharacters = [],
+  guesses = 5,
+  hint = null,
+  word = null,
+  allGuessed = false;
 
 function startGame() {
   // Retrieve random word from wordList
-  var randomObj = getRandomWord(),
-    hint = randomObj ? randomObj.hint : null,
-    word = randomObj ? randomObj.word : null;
+  var randomObj = getRandomWord();
+
+  hint = randomObj ? randomObj.hint : null;
+  word = randomObj ? randomObj.word : null;
 
   initFields(hint);
-
-  wrongCharacters = [];
 
   for (let i = 0; i < word.length; i++) {
     // Create input element
@@ -53,6 +56,8 @@ function startGame() {
     // Hide character
     input.style.color = "transparent";
 
+    input.guessed = false;
+
     inputs.append(input);
   }
 
@@ -61,6 +66,7 @@ function startGame() {
     "keydown",
     (event) => {
       var key = event.key;
+      key = key.toLocaleLowerCase();
 
       // ! Allow to digit only characters and numbers
       if (!isKeyValid(key)) {
@@ -75,11 +81,21 @@ function startGame() {
         (inputs.childNodes || []).forEach((input) => {
           if (input.value === key) {
             input.style.color = "#57a6a8";
+            input.guessed = true;
           }
+          allGuessed = input.guessed;
         });
+
+        setTimeout(() => {
+          if (allGuessed) {
+            alert("Win!");
+            startGame();
+          }
+        }, 100);
       } else {
         // Case when word not contains key:
         // # Add character to wrongCharactersLabel
+        // # Decrement remaining guesses
         if (!wrongCharacters.includes(key)) {
           wrongCharacters.push(key);
           wrongCharactersLabel.innerHTML =
@@ -87,13 +103,24 @@ function startGame() {
             "<b>" +
             wrongCharacters.join(", ").toLocaleUpperCase() +
             "</b>";
+
+          guesses--;
+
+          setTimeout(() => {
+            if (guesses === 0) {
+              alert("Lose! You have used all the attempts");
+              startGame();
+            }
+          }, 100);
+
+          remainingGuessesLabel.innerHTML =
+            "Remaining guesses: " + "<b>" + guesses + "</b>";
         }
-        // TODO Decrement remaining guesses
       }
     },
     false
   );
-}
+} v
 
 startGame();
 
@@ -124,6 +151,9 @@ function getRandomWord() {
 }
 
 function initFields(hint) {
+  wrongCharacters = [];
+  guesses = 5;
+  allGuessed = false;
   if (inputs) {
     inputs.innerHTML = "";
   }
@@ -132,5 +162,9 @@ function initFields(hint) {
   }
   if (wrongCharactersLabel) {
     wrongCharactersLabel.innerHTML = "Wrong characters: ";
+  }
+  if (remainingGuessesLabel) {
+    remainingGuessesLabel.innerHTML =
+      "Remaining guesses: " + "<b>" + guesses + "</b>";
   }
 }
