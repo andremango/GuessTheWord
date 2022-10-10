@@ -120,7 +120,7 @@ function startGame() {
     },
     false
   );
-} v
+}
 
 startGame();
 
